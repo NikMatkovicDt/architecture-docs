@@ -1,5 +1,10 @@
 # RFC-0001: Every rendered diagram must declare an explicit theme
 
+- **Status:** Collecting Feedback
+- **Authors:** Nikola Matkovic
+- **Feedback Deadline:** 2026-12-02
+- **Last Update:** 2026-11-18
+
 ## Summary
 
 Diagram rendering tools support multiple visual themes (e.g. `studio`, `technical`,
@@ -7,14 +12,14 @@ Diagram rendering tools support multiple visual themes (e.g. `studio`, `technica
 library call, or automated script — must pass an explicit `theme` argument rather than
 relying on an implicit default.
 
-## Motivation
+## Need
 
 Relying on a silent default theme has caused confusion when diagrams intended for a
 client presentation were generated with the `technical` theme (or vice versa) because
 a script omitted the `--theme` flag. Explicit is better than implicit for anything that
 ends up in front of a client or in a slide deck.
 
-## Proposed rule
+## Approach
 
 - Any `render` call (CLI: `python -m diagram_toolkit render ...`, library:
   `render(type, data, theme)`) must pass `theme` explicitly. Omitting it should be
@@ -24,13 +29,19 @@ ends up in front of a client or in a slide deck.
 - If a genuine "use the default theme" use case exists, it must be written as
   `theme="studio"` explicitly, not omitted.
 
-## Alternatives considered
+## Pros & Cons
+
+Not recorded when this RFC was written.
+
+## Alternatives
 
 - Keep relying on the default theme. Rejected: silent defaults are exactly the kind of
   thing that leads to inconsistent output being merged and only caught by a human at
   presentation time.
+- **Not recorded.** A second alternative wasn't written down when this RFC was
+  drafted; add one before it's accepted.
 
-## Status
+## Appendix / References
 
-Proposed — pending team review. Once accepted, this line should be updated to
-"Accepted" and this file may be promoted to an ADR.
+- Once accepted, this RFC may be promoted to an ADR.
+- [diagram-toolkit](https://github.com/NikMatkovicDt/diagram-toolkit), where this applies first.
