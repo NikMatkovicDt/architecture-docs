@@ -1,13 +1,14 @@
 ---
 name: rfc
-description: Propose an org-wide rule or practice every team should follow (an RFC) in the strict format of NikMatkovicDt/architecture-docs, as a pull request with status Proposed. Not for a single decision about one system (that's the adr skill) or for researching options (that's the research skill).
+description: Write a Request for Comments (RFC) - a proposed change that needs buy-in from other teams or everyone (a practice all teams follow, a cross-team architecture change) - in the strict format of NikMatkovicDt/architecture-docs, as a pull request collecting feedback until a deadline. Not for a decision the people concerned can make quickly themselves (that's the adr skill) or for researching options (that's the research skill).
 ---
 
 # RFC
 
-An RFC proposes **a rule for every team**: "everyone should do X from now on". It applies
-only once a person accepts it. If it's one decision for one system, write an ADR (`adr`
-skill) instead.
+An RFC **drives a change that needs others to agree**: other teams, or everyone. It
+collects feedback until a deadline, and applies only once a person accepts it. An accepted
+RFC can then lead to one or more ADRs (`adr` skill) recording how it's carried out. A
+decision the people concerned can make quickly themselves is an ADR from the start.
 
 **Who:** in an agent team, only the **architect** writes RFCs. Other seats suggest one to
 the architect. A person may write one directly.
@@ -23,19 +24,22 @@ cocoindex: `get_document(repo="architecture-docs", filename="<path>")`.
 3. **Place and number it:** `docs/rfcs/` in architecture-docs, the next free number there,
    `NNNN-kebab-slug.md`, with the same number in the title.
 4. **Write it:**
-   - Title: the rule ("Every service exposes a health endpoint").
-   - Summary: what changes for teams.
-   - Motivation: the problem, with evidence (incidents, review findings).
-   - Proposed rules: must / should / may, each checkable in a review, each with its
-     reason.
-   - Alternatives considered: each real option and why it lost.
-   - Related: or `None.`
-5. **Status:** you write `Proposed` (or `Draft` while it's unfinished). An agent never
-   sets `Accepted`, `Rejected` or `Withdrawn`. `Date` is today; `Author` is your name or
-   `seat@team`.
+   - Title: the change ("Every service exposes a health endpoint").
+   - Summary: two to four sentences on what changes and for whom.
+   - Need: why, with examples (incidents, review findings).
+   - Approach: how, with must / should / may, each rule checkable in a review.
+   - Pros & Cons: the approach's factual benefits and drawbacks.
+   - Alternatives: **at least two**, one bullet each, with pros, cons and why not
+     chosen.
+   - Appendix / References: or `None.`
+5. **Status:**
+   - You write `Draft`. When you open the pull request, set `Collecting Feedback` with a
+     `Feedback Deadline` two weeks out (unless told otherwise), and update `Last Update`.
+   - You never set `Accepted`, `Rejected` or `Abandoned`.
+   - `Authors`: your name or `seat@team`.
 6. **Check it:** run `scripts/check_records.py` on the file. Outside the repo, fetch it
    from cocoindex, save it as `/tmp/check_records.py` exactly, and run
    `python3 /tmp/check_records.py <file>`. Fix every problem, and paste the clean output
    into your handoff (reviewers check for it).
-7. **Open a pull request** to architecture-docs with status `Proposed`, and never merge it
-   yourself. Accepted RFCs become review context for every repo, so a person decides.
+7. **Open a pull request** to architecture-docs and never merge it yourself. Accepted
+   RFCs become review context for every repo, so a person decides.

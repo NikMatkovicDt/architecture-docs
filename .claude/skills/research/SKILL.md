@@ -6,7 +6,7 @@ description: Write a research note that answers a technical or product question 
 # Research note
 
 A research note answers **a question**: "should we use X or Y?", "is Z feasible?", "how does
-W behave?". It recommends; a person decides. The decision then goes in an ADR (`adr` skill).
+W behave?". It recommends; a person decides. The decision then goes in an RFC or ADR.
 
 Everything below lives in the **architecture-docs** repo. Inside ai-devbox, read it through
 cocoindex: `get_document(repo="architecture-docs", filename="<path>")`.
@@ -33,10 +33,10 @@ cocoindex: `get_document(repo="architecture-docs", filename="<path>")`.
    A prototype, if any, is throwaway and described in `## Prototype`. Otherwise delete
    that section.
 7. **Status:** `Open`, then `In progress`, then `Answered` (or `Time-boxed out`). `Date` is
-   the last change; `Author` is your name or `seat@team`.
+   the last change; `Authors` is your name or `seat@team`.
 8. **Check it:** run `scripts/check_records.py` on the file. Outside the repo, fetch it
    from cocoindex, save it as `/tmp/check_records.py` exactly, and run
    `python3 /tmp/check_records.py <file>` when you hand the note on. Paste the clean
    output into your handoff.
-9. **Recommendation:** name the decision a person needs to make. If one follows, draft the
-   ADR as `Proposed` and link it in Related or Recommendation.
+9. **Recommendation:** name the decision a person needs to make, and whether it needs an
+   RFC (others must agree) or an ADR. If one follows, draft it (`Draft` status) and link it.

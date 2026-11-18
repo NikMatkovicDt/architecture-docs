@@ -1,8 +1,9 @@
 # RFC-0004: .NET good practices
 
-- **Status:** Proposed
-- **Date:** 2026-11-18
-- **Author:** Nikola Matkovic
+- **Status:** Collecting Feedback
+- **Authors:** Nikola Matkovic
+- **Feedback Deadline:** 2026-12-02
+- **Last Update:** 2026-11-18
 
 ## Summary
 
@@ -11,7 +12,7 @@ dependency injection, async usage, configuration, API layering, EF Core data
 access, error handling, nullability, and testing — so services built on .NET
 are consistent and reviewable regardless of which team wrote them.
 
-## Motivation
+## Need
 
 .NET offers several valid ways to solve the same problem (manual service
 instantiation vs. DI, blocking vs. async calls, ad hoc config reads vs. the
@@ -20,7 +21,7 @@ failure mode in production (thread-pool starvation from blocked async calls,
 N+1 queries from EF Core, inconsistent error shapes across endpoints).
 Codifying the default approach prevents these recurring, avoidable problems.
 
-## Proposed rules
+## Approach
 
 - **Use the built-in DI container (`IServiceCollection`) exclusively.** No
   static service-locator patterns or manually `new`-ed dependencies in
@@ -52,7 +53,11 @@ Codifying the default approach prevents these recurring, avoidable problems.
   (e.g. a third-party HTTP client) — don't mock internal collaborators that
   could just as easily be exercised directly.
 
-## Alternatives considered
+## Pros & Cons
+
+Not recorded when this RFC was written.
+
+## Alternatives
 
 - **Blocking calls where "it's just one await" seems harmless.** Rejected:
   there's no reliably "safe" place to block on async code in a service
@@ -63,6 +68,6 @@ Codifying the default approach prevents these recurring, avoidable problems.
   configuration shape knowledge across the codebase instead of centralizing
   it in typed option classes.
 
-## Related
+## Appendix / References
 
 None.

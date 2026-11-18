@@ -1,27 +1,28 @@
 # ADR-NNNN: <The decision, as a statement>
 
-- **Status:** Proposed
-- **Date:** YYYY-MM-DD
-- **Author:** <name, or seat@team>
+- **Status:** Draft
+- **Authors:** <name, or seat@team>
 - **Scope:** <org | repo>
 
-## Context
+## Context / Problem
 
-<The problem and the forces at play: what makes a decision necessary now, constraints,
-existing ADRs or RFCs that apply. No solution yet.>
+<The problem and the context driving it: what makes a decision necessary now,
+constraints, the RFCs and ADRs that apply. No solution yet.>
 
-## Decision
+## Decision & Rationale
 
-<What we decided, with must / should / may. Concrete enough to check in a review.>
+<The decision in one sentence, with must / should / may.>
 
-## Alternatives considered
-
-- **<Option>.** <What it is, and why it was not chosen.>
+- <Reason, ideally with evidence.>
 
 ## Consequences
 
-- <What becomes easier, harder or required because of this decision, good and bad.>
+- <Expected and known consequences, good and bad, including second-order effects.>
 
-## Related
+## Considered Options
 
-- <Links to research notes, RFCs, other ADRs, issues or repos, or "None.">
+- **<Option>.** Pros: <…>. Cons: <…>. Rejected because <…>.
+
+## Appendix / References
+
+- <Links to the RFC, research notes, other ADRs, issues or repos, or "None.">

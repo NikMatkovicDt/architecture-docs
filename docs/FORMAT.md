@@ -2,19 +2,26 @@
 
 The rules every ADR, RFC and research note follows, whoever writes it: a person, their
 own Claude, or an agent team. `scripts/check_records.py` checks them, and CI runs it on
-every pull request.
+every pull request. The ADR and RFC layouts follow Candost Dagdeviren's
+[ADRs and RFCs: their differences and when to use which](https://candost.blog/adrs-rfcs-differences-when-which/),
+with a few local changes listed at the end.
 
 ## Which record
 
 | Record | Use it for | Lives in |
 |---|---|---|
-| **ADR** (Architecture Decision Record) | **one decision that has been made** (or is proposed), with its context, the options weighed and the consequences | `docs/adr/` here for decisions that apply across repos (**Scope: org**); the repo's own ADR folder (its existing one, else `docs/adr/`) for decisions about one repo (**Scope: repo**) |
-| **RFC** (Request for Comments) | **a proposed rule or practice for every team**, which needs review before it applies | `docs/rfcs/` here |
-| **Research note** | **a question answered with evidence**: options compared, a recommendation and its confidence. Often the input to an ADR | next to the work that asked the question, usually `docs/research/` |
+| **RFC** (Request for Comments) | **driving a change that needs buy-in from others**: other teams, or everyone (a practice every team follows, a cross-team architecture change). Collects feedback, often over days | `docs/rfcs/` here |
+| **ADR** (Architecture Decision Record) | **recording one decision that can be made and executed quickly** by the people it concerns, with its rationale, consequences and the options weighed | the repo's own ADR folder (its existing one, else `docs/adr/`) for **Scope: repo**; `docs/adr/` here for **Scope: org**, a decision that applies across repos |
+| **Research note** | **answering a question with evidence**: options compared, a recommendation and its confidence. Often the input to an RFC or ADR | next to the work that asked the question, usually `docs/research/` |
 
-The test: *"we decided X for this system"* is an ADR. *"Everyone should do X from now on"*
-is an RFC. *"Should we do X or Y? Here's what we found"* is a research note. An accepted
-RFC that settles one decision may be followed by an ADR that records it.
+The test:
+- *"We need others to agree before this changes"* is an RFC.
+- *"We decided X for this system"* is an ADR.
+- *"Should we do X or Y? Here's what we found"* is a research note.
+
+**RFCs come first.** Anything that needs wider buy-in starts as an RFC. An accepted RFC
+can then lead to one or more ADRs that record how it's carried out, each linking back to
+it under `Appendix / References`.
 
 ## Files and numbers
 
@@ -31,41 +38,60 @@ RFC that settles one decision may be followed by an ADR that records it.
 The title is the first line. A metadata list follows straight after it, one
 `- **Key:** value` per line in the order below, then the `##` sections in the order below,
 each one present and not empty. `###` subsections are free. No other `##` sections.
+Dates are `YYYY-MM-DD`. Authors are people, or agents as `seat@team`, comma-separated.
 Templates: [ADR](adr/TEMPLATE.md), [RFC](rfcs/TEMPLATE.md), [research note](research/TEMPLATE.md).
 
 ### ADR
 - Title: `# ADR-NNNN: <the decision, as a statement>`
-- Metadata:
+- Metadata, in order:
   - `Status`;
-  - `Date` (`YYYY-MM-DD`, the last status change);
-  - `Author`: a person, or an agent as `seat@team`;
+  - `Authors`;
+  - `Decision Date`: required once the status is `Accepted`, `Implemented` or
+    `Superseded`;
   - `Scope`: `org` or `repo`;
   - optional `Supersedes` and `Superseded by`: `ADR-NNNN`, comma-separated for several.
-- Sections: `Context`, `Decision`, `Alternatives considered`, `Consequences`, `Related`.
+- Sections:
+  1. `Context / Problem`: the problem and the context driving it.
+  2. `Decision & Rationale`: the decision in one sentence, then the reasons as bullets.
+  3. `Consequences`: expected and known consequences, including second-order effects.
+  4. `Considered Options`: at least one option besides the chosen one, each with its
+     pros and cons and why it was rejected. One `- ` bullet or `###` subsection per
+     option.
+  5. `Appendix / References`: links to the RFC, research notes, other ADRs, issues or
+     repos it builds on, or `None.`
 
 ### RFC
-- Title: `# RFC-NNNN: <the proposed rule>`
-- Metadata: `Status`, `Date`, `Author`.
-- Sections: `Summary`, `Motivation`, `Proposed rules`, `Alternatives considered`, `Related`.
+- Title: `# RFC-NNNN: <the proposed change>`
+- Metadata, in order:
+  - `Status`;
+  - `Authors`;
+  - `Feedback Deadline`: required while the status is `Collecting Feedback`;
+  - `Last Update`.
+- Sections:
+  1. `Summary`: two to four sentences on what changes and for whom.
+  2. `Need`: why the change is needed (context and problem), with examples.
+  3. `Approach`: how to meet the need. Rules use **must** / **should** / **may**.
+  4. `Pros & Cons`: the factual benefits and drawbacks of the approach.
+  5. `Alternatives`: **at least two**, each with pros and cons and why it wasn't
+     chosen. One `- ` bullet or `###` subsection per alternative.
+  6. `Appendix / References`: links, or `None.`
 
 ### Research note
 - Title: `# Research: <the question, as one sentence>`
-- Metadata:
-  - `Status`, `Date`, `Author`;
+- Metadata, in order:
+  - `Status`, `Date`, `Authors`;
   - `Type`: `question` or `spike`;
   - optional `Requested by` and `Time-box` (a spike has a time-box).
 - Sections:
-  - `Question`;
-  - `Answer` (the recommendation in two to four sentences, with confidence: high, medium or low);
-  - `Criteria`;
-  - `Options`;
-  - `Prototype` (optional; only when one was built);
-  - `Risks and unknowns`;
-  - `Recommendation`;
-  - `Sources`.
-
-`Related` lists links to the records, research notes, issues or repos this one builds on,
-or says `None.`
+  1. `Question`;
+  2. `Answer`: the recommendation in two to four sentences, with confidence (high,
+     medium or low);
+  3. `Criteria`;
+  4. `Options`;
+  5. `Prototype`: optional, only when one was built;
+  6. `Risks and unknowns`;
+  7. `Recommendation`;
+  8. `Sources`.
 
 Every section has text. Only a research note with status `Open` or `In progress` may have
 empty sections while it's being written.
@@ -76,26 +102,39 @@ backticks.
 
 ## Status values
 
-| Record | Values | Notes |
-|---|---|---|
-| ADR | `Proposed`, `Accepted`, `Rejected`, `Deprecated`, `Superseded` | `Superseded` needs `Superseded by`; the newer ADR names it in `Supersedes` |
-| RFC | `Draft`, `Proposed`, `Accepted`, `Rejected`, `Withdrawn` | |
-| Research note | `Open`, `In progress`, `Answered`, `Time-boxed out` | |
+| Record | Values |
+|---|---|
+| ADR | `Draft`, `In Discussion`, `Accepted`, `Implemented`, `Abandoned`, `Superseded` (needs `Superseded by`; the newer ADR names it in `Supersedes`) |
+| RFC | `Draft`, `Collecting Feedback`, `Accepted`, `Rejected`, `Abandoned` |
+| Research note | `Open`, `In progress`, `Answered`, `Time-boxed out` |
 
-**Only people accept.** An agent writes ADRs and RFCs as `Proposed` (or `Draft`) and never
-sets `Accepted`, `Rejected`, `Deprecated` or `Withdrawn`. A human does that when merging or
-reviewing, and updates `Date`.
+**Only people decide.**
+- An agent writes ADRs as `Draft`, then sets `In Discussion` when it hands the ADR to a
+  person.
+- An agent writes RFCs as `Draft`, then sets `Collecting Feedback` with a
+  `Feedback Deadline` (default: two weeks later) when it opens the pull request.
+- An agent never sets `Accepted`, `Implemented`, `Rejected`, `Abandoned` or `Superseded`.
+  A person does, and fills in `Decision Date` or `Last Update`.
+
+Records change in git. The commit history is the update log, so commit messages say what
+changed and why.
 
 ## Writing well
 
-- Context and Motivation give the problem, not the solution.
-- Decision and Proposed rules use **must** / **should** / **may** deliberately. Every rule
+- Context / Problem and Need describe the problem, not the solution.
+- Decisions and approaches use **must** / **should** / **may** deliberately. Every rule
   can be checked in a review.
-- Alternatives considered: each real option and why it lost. "Not recorded" is allowed
-  only for records written before this format.
+- Options and alternatives are real ones, each with pros and cons. "Not recorded" is
+  allowed only in records written before this format.
 - Separate facts (with a source) from inferences, especially in research notes.
 - Diagrams go next to the record (`diagrams/<name>.*` in the same folder), made with the
   diagram-toolkit when it's available, else Mermaid.
+
+## Local changes to the blog's format
+- ADR status `Accepted` instead of `Decided`.
+- ADRs have a `Scope` (`org` or `repo`).
+- RFCs start with a `Summary`, because PR-Agent reads these files as review context.
+- No `Update Log` section: git history is the log.
 
 ## Checking
 

@@ -1,25 +1,33 @@
-# RFC-NNNN: <The proposed rule>
+# RFC-NNNN: <The proposed change>
 
-- **Status:** Proposed
-- **Date:** YYYY-MM-DD
-- **Author:** <name, or seat@team>
+- **Status:** Draft
+- **Authors:** <name, or seat@team>
+- **Feedback Deadline:** YYYY-MM-DD
+- **Last Update:** YYYY-MM-DD
 
 ## Summary
 
-<Two to four sentences: what every team would do differently, and where it applies.>
+<Two to four sentences: what changes, and for whom.>
 
-## Motivation
+## Need
 
-<The problem this solves, with evidence: incidents, review findings, inconsistency.>
+<Why the change is needed: the context and problem, with examples (incidents, review
+findings, inconsistency).>
 
-## Proposed rules
+## Approach
 
-- **<Rule, with must / should / may.>** <Why, in one or two sentences.>
+- **<Rule or step, with must / should / may.>** <Why, in one or two sentences.>
 
-## Alternatives considered
+## Pros & Cons
 
-- **<Option>.** <What it is, and why it was not chosen.>
+- **Pro:** <factual benefit>
+- **Con:** <factual drawback>
 
-## Related
+## Alternatives
+
+- **<Alternative 1>.** Pros: <…>. Cons: <…>. Not chosen because <…>.
+- **<Alternative 2>.** Pros: <…>. Cons: <…>. Not chosen because <…>.
+
+## Appendix / References
 
 - <Links to ADRs, research notes, issues or repos, or "None.">

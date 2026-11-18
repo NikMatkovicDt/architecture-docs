@@ -16,42 +16,48 @@ from datetime import date
 from pathlib import Path
 
 ID = r"ADR-\d{4}(, ADR-\d{4})*"
+DATE = "date"  # marker: value must be YYYY-MM-DD
 KINDS = {
     "ADR": {
         "title": re.compile(r"# ADR-(\d{4}): \S"),
         "file": re.compile(r"(\d{4})-[a-z0-9]+(-[a-z0-9]+)*\.md"),
-        # key -> (required, allowed value pattern)
+        # key -> (required: True, False, or the statuses that require it; value pattern)
         "meta": {
-            "Status": (True, r"Proposed|Accepted|Rejected|Deprecated|Superseded"),
-            "Date": (True, None),
-            "Author": (True, r".+"),
+            "Status": (
+                True,
+                r"Draft|In Discussion|Accepted|Implemented|Abandoned|Superseded",
+            ),
+            "Authors": (True, r".+"),
+            "Decision Date": ({"Accepted", "Implemented", "Superseded"}, DATE),
             "Scope": (True, r"org|repo"),
             "Supersedes": (False, ID),
-            "Superseded by": (False, ID),
+            "Superseded by": ({"Superseded"}, ID),
         },
-        # section -> required
+        # section -> (required, minimum number of entries: `- ` bullets or `###`)
         "sections": {
-            "Context": True,
-            "Decision": True,
-            "Alternatives considered": True,
-            "Consequences": True,
-            "Related": True,
+            "Context / Problem": (True, 0),
+            "Decision & Rationale": (True, 0),
+            "Consequences": (True, 0),
+            "Considered Options": (True, 1),
+            "Appendix / References": (True, 0),
         },
     },
     "RFC": {
         "title": re.compile(r"# RFC-(\d{4}): \S"),
         "file": re.compile(r"(\d{4})-[a-z0-9]+(-[a-z0-9]+)*\.md"),
         "meta": {
-            "Status": (True, r"Draft|Proposed|Accepted|Rejected|Withdrawn"),
-            "Date": (True, None),
-            "Author": (True, r".+"),
+            "Status": (True, r"Draft|Collecting Feedback|Accepted|Rejected|Abandoned"),
+            "Authors": (True, r".+"),
+            "Feedback Deadline": ({"Collecting Feedback"}, DATE),
+            "Last Update": (True, DATE),
         },
         "sections": {
-            "Summary": True,
-            "Motivation": True,
-            "Proposed rules": True,
-            "Alternatives considered": True,
-            "Related": True,
+            "Summary": (True, 0),
+            "Need": (True, 0),
+            "Approach": (True, 0),
+            "Pros & Cons": (True, 0),
+            "Alternatives": (True, 2),
+            "Appendix / References": (True, 0),
         },
     },
     "Research": {
@@ -59,21 +65,21 @@ KINDS = {
         "file": re.compile(r"[a-z0-9]+(-[a-z0-9]+)*\.md"),
         "meta": {
             "Status": (True, r"Open|In progress|Answered|Time-boxed out"),
-            "Date": (True, None),
-            "Author": (True, r".+"),
+            "Date": (True, DATE),
+            "Authors": (True, r".+"),
             "Type": (True, r"question|spike"),
             "Requested by": (False, r".+"),
             "Time-box": (False, r".+"),
         },
         "sections": {
-            "Question": True,
-            "Answer": True,
-            "Criteria": True,
-            "Options": True,
-            "Prototype": False,
-            "Risks and unknowns": True,
-            "Recommendation": True,
-            "Sources": True,
+            "Question": (True, 0),
+            "Answer": (True, 0),
+            "Criteria": (True, 0),
+            "Options": (True, 0),
+            "Prototype": (False, 0),
+            "Risks and unknowns": (True, 0),
+            "Recommendation": (True, 0),
+            "Sources": (True, 0),
         },
     },
 }
@@ -125,21 +131,22 @@ def check(path: Path, text: str, kind: str) -> list[str]:
     keys = list(spec["meta"])
     if order != sorted(order, key=keys.index):
         err(3, f"metadata out of order; order is {', '.join(keys)}")
+    status = meta.get("Status", (0, ""))[1]
     for key, (required, pattern) in spec["meta"].items():
         if key not in meta:
-            if required:
+            if required is True:
                 err(3, f"missing metadata '{key}'")
+            elif required and status in required:
+                err(3, f"status {status} needs metadata '{key}'")
             continue
         n, value = meta[key]
-        if key == "Date":
+        if pattern == DATE:
             try:
                 date.fromisoformat(value)
             except ValueError:
-                err(n, "Date must be YYYY-MM-DD")
-        elif pattern and not re.fullmatch(pattern, value):
+                err(n, f"{key} must be YYYY-MM-DD")
+        elif not re.fullmatch(pattern, value):
             err(n, f"{key} must match {pattern!r}, got {value!r}")
-    if kind == "ADR" and meta.get("Status", (0, ""))[1] == "Superseded" and "Superseded by" not in meta:
-        err(meta["Status"][0], "a Superseded ADR needs 'Superseded by'")
 
     # Sections: `##` headings outside code fences, exactly the allowed ones, in order.
     found: list[tuple[int, str]] = []
@@ -161,16 +168,21 @@ def check(path: Path, text: str, kind: str) -> list[str]:
     present = [name for _, name in found if name in spec["sections"]]
     if present != sorted(present, key=names.index) or len(set(present)) != len(present):
         err(found[0][0] if found else 1, f"sections out of order or repeated; order is {', '.join(names)}")
-    for name, required in spec["sections"].items():
+    for name, (required, _) in spec["sections"].items():
         if required and name not in present:
             err(1, f"missing section '## {name}'")
     # Each section has some text before the next one.
     bounds = [n for n, _ in found] + [len(lines) + 1]
     # A research note still being worked on may have empty sections.
-    drafting = kind == "Research" and meta.get("Status", (0, ""))[1] in ("Open", "In progress")
+    drafting = kind == "Research" and status in ("Open", "In progress")
     for (n, name), end in zip(found, bounds[1:]):
-        if not drafting and not any(line.strip() for line in lines[n : end - 1]):
+        body = lines[n : end - 1]
+        if not drafting and not any(line.strip() for line in body):
             err(n, f"section '## {name}' is empty")
+        least = spec["sections"].get(name, (False, 0))[1]
+        entries = sum(1 for line in body if line.startswith(("- ", "### ")))
+        if entries < least:
+            err(n, f"section '## {name}' needs at least {least} entries ('- ' or '###'), has {entries}")
     return errs
 
 

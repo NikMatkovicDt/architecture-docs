@@ -2,7 +2,7 @@
 
 - **Status:** Open
 - **Date:** YYYY-MM-DD
-- **Author:** <name, or seat@team>
+- **Authors:** <name, or seat@team>
 - **Type:** <question | spike>
 - **Requested by:** <who asked>
 - **Time-box:** <e.g. 1h; spikes only, else delete this line>
@@ -40,7 +40,7 @@ Throwaway.>
 
 ## Recommendation
 
-<What to do next, and the decision a person needs to make. Follow-up: an ADR (Proposed)
+<What to do next, and the decision a person needs to make. Follow-up: an RFC or ADR (Draft)
 or a suggested piece of work.>
 
 ## Sources

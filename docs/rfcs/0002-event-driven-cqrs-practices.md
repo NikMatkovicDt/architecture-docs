@@ -1,8 +1,9 @@
 # RFC-0002: Event-driven architecture & CQRS good practices
 
-- **Status:** Proposed
-- **Date:** 2026-11-18
-- **Author:** Nikola Matkovic
+- **Status:** Collecting Feedback
+- **Authors:** Nikola Matkovic
+- **Feedback Deadline:** 2026-12-02
+- **Last Update:** 2026-11-18
 
 ## Summary
 
@@ -12,7 +13,7 @@ Segregation), so that teams reaching for these patterns converge on
 consistent, debuggable designs instead of each reinventing the hard parts
 (idempotency, schema evolution, failure handling) independently.
 
-## Motivation
+## Need
 
 CQRS and event-driven designs solve real problems — read/write scaling
 divergence, decoupling producers from consumers, auditability — but they also
@@ -22,7 +23,7 @@ without breaking existing consumers, and eventual consistency that's easy to
 accidentally hide from users until it causes confusion. Without agreed
 practices, each team re-derives these the hard way, usually after an incident.
 
-## Proposed rules
+## Approach
 
 - **Separate command and query models explicitly.** Commands mutate state and
   return only acknowledgement/identifiers, never query results. Queries never
@@ -45,7 +46,11 @@ practices, each team re-derives these the hard way, usually after an incident.
   every event and projection it produces, so a single business operation can
   be followed end-to-end across asynchronous boundaries.
 
-## Alternatives considered
+## Pros & Cons
+
+Not recorded when this RFC was written.
+
+## Alternatives
 
 - **Leave this to each team's judgment.** Rejected: the failure modes above
   (duplicate delivery, silent event-schema breaks, hidden staleness) are
@@ -57,6 +62,6 @@ practices, each team re-derives these the hard way, usually after an incident.
   doesn't require event sourcing, only that *if* events are used as an
   integration/audit mechanism, they follow the rules above.
 
-## Related
+## Appendix / References
 
 None.

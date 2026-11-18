@@ -1,8 +1,9 @@
 # RFC-0003: Spring Boot good practices
 
-- **Status:** Proposed
-- **Date:** 2026-11-18
-- **Author:** Nikola Matkovic
+- **Status:** Collecting Feedback
+- **Authors:** Nikola Matkovic
+- **Feedback Deadline:** 2026-12-02
+- **Last Update:** 2026-11-18
 
 ## Summary
 
@@ -11,7 +12,7 @@ covering dependency injection style, configuration, layering, transactions,
 validation, error handling, observability, and testing — so services built on
 Spring Boot are consistent and reviewable regardless of which team wrote them.
 
-## Motivation
+## Need
 
 Spring Boot's flexibility means the same problem (e.g. "inject a dependency",
 "handle a validation error") can be solved several different ways in the same
@@ -19,7 +20,7 @@ codebase, which makes cross-team review and onboarding harder than it needs to
 be. Codifying a default approach for the common cases reduces that variance
 without blocking genuine exceptions.
 
-## Proposed rules
+## Approach
 
 - **Constructor injection only.** No field-level `@Autowired`. Constructor
   injection makes required dependencies explicit, supports immutability
@@ -50,7 +51,11 @@ without blocking genuine exceptions.
   services. Reserve full `@SpringBootTest` for genuine integration tests,
   since it's the slowest option and a convenient default is to overuse it.
 
-## Alternatives considered
+## Pros & Cons
+
+Not recorded when this RFC was written.
+
+## Alternatives
 
 - **Field injection for brevity.** Rejected: it hides required dependencies,
   makes classes harder to unit test without reflection tricks, and prevents
@@ -59,6 +64,6 @@ without blocking genuine exceptions.
   slow at scale; a test suite that defaults to full-context tests becomes a
   CI bottleneck as the codebase grows.
 
-## Related
+## Appendix / References
 
 None.
