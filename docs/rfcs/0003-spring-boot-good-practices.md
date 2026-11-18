@@ -1,5 +1,9 @@
 # RFC-0003: Spring Boot good practices
 
+- **Status:** Proposed
+- **Date:** 2026-11-18
+- **Author:** Nikola Matkovic
+
 ## Summary
 
 This RFC proposes a baseline set of good practices for Spring Boot services,
@@ -55,6 +59,6 @@ without blocking genuine exceptions.
   slow at scale; a test suite that defaults to full-context tests becomes a
   CI bottleneck as the codebase grows.
 
-## Status
+## Related
 
-Proposed — pending team review.
+None.

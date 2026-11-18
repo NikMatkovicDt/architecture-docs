@@ -1,5 +1,9 @@
 # RFC-0004: .NET good practices
 
+- **Status:** Proposed
+- **Date:** 2026-11-18
+- **Author:** Nikola Matkovic
+
 ## Summary
 
 This RFC proposes a baseline set of good practices for .NET services, covering
@@ -59,6 +63,6 @@ Codifying the default approach prevents these recurring, avoidable problems.
   configuration shape knowledge across the codebase instead of centralizing
   it in typed option classes.
 
-## Status
+## Related
 
-Proposed — pending team review.
+None.

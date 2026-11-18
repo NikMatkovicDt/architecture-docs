@@ -1,5 +1,9 @@
 # RFC-0001: Every rendered diagram must declare an explicit theme
 
+- **Status:** Proposed
+- **Date:** 2026-11-18
+- **Author:** Nikola Matkovic
+
 ## Summary
 
 Diagram rendering tools support multiple visual themes (e.g. `studio`, `technical`,
@@ -14,7 +18,7 @@ client presentation were generated with the `technical` theme (or vice versa) be
 a script omitted the `--theme` flag. Explicit is better than implicit for anything that
 ends up in front of a client or in a slide deck.
 
-## Proposed rule
+## Proposed rules
 
 - Any `render` call (CLI: `python -m diagram_toolkit render ...`, library:
   `render(type, data, theme)`) must pass `theme` explicitly. Omitting it should be
@@ -30,7 +34,7 @@ ends up in front of a client or in a slide deck.
   thing that leads to inconsistent output being merged and only caught by a human at
   presentation time.
 
-## Status
+## Related
 
-Proposed — pending team review. Once accepted, this line should be updated to
-"Accepted" and this file may be promoted to an ADR.
+- Once accepted, this RFC may be promoted to an ADR.
+- [diagram-toolkit](https://github.com/NikMatkovicDt/diagram-toolkit), where this applies first.

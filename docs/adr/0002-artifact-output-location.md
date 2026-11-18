@@ -1,8 +1,9 @@
 # ADR-0002: Exported diagram artifacts must live under `artifacts/`
 
-## Status
-
-Accepted
+- **Status:** Accepted
+- **Date:** 2026-11-18
+- **Author:** Nikola Matkovic
+- **Scope:** org
 
 ## Context
 
@@ -23,9 +24,17 @@ directory**, using a path structure of `artifacts/<diagram-name>/<file>`.
 - One-off exploratory scripts and CI jobs must not write generated diagrams to the
   repository root, `test_result/`, or any other ad-hoc location.
 
+## Alternatives considered
+
+Not recorded when this ADR was accepted.
+
 ## Consequences
 
 - Easier repo hygiene: a single directory to gitignore and clean.
 - Predictable location for CI to pick up artifacts for upload as build outputs.
 - Reviewers should flag any PR whose export/output path does not resolve under
   `artifacts/`.
+
+## Related
+
+- [diagram-toolkit](https://github.com/NikMatkovicDt/diagram-toolkit), where this applies first.

@@ -1,5 +1,9 @@
 # RFC-0002: Event-driven architecture & CQRS good practices
 
+- **Status:** Proposed
+- **Date:** 2026-11-18
+- **Author:** Nikola Matkovic
+
 ## Summary
 
 This RFC proposes a baseline set of practices for services that adopt an
@@ -53,6 +57,6 @@ practices, each team re-derives these the hard way, usually after an incident.
   doesn't require event sourcing, only that *if* events are used as an
   integration/audit mechanism, they follow the rules above.
 
-## Status
+## Related
 
-Proposed — pending team review.
+None.

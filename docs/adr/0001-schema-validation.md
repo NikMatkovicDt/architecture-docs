@@ -1,8 +1,9 @@
 # ADR-0001: Validate diagram JSON against schema before rendering
 
-## Status
-
-Accepted
+- **Status:** Accepted
+- **Date:** 2026-11-18
+- **Author:** Nikola Matkovic
+- **Scope:** org
 
 ## Context
 
@@ -27,6 +28,10 @@ Concretely:
 - CLI commands that skip validation (e.g. a `--force` or `--skip-validation` flag) must
   default to `false`/off, and must not be used in CI or automated pipelines.
 
+## Alternatives considered
+
+Not recorded when this ADR was accepted.
+
 ## Consequences
 
 - Slightly more upfront work when adding a new diagram type (schema + validation must
@@ -35,3 +40,7 @@ Concretely:
   opaque renderer stack traces.
 - Reviewers should flag any PR that adds or modifies a render/export code path without
   a corresponding validation call.
+
+## Related
+
+- [diagram-toolkit](https://github.com/NikMatkovicDt/diagram-toolkit), where this applies first.
