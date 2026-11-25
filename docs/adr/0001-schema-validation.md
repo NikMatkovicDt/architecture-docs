@@ -1,17 +1,18 @@
 # ADR-0001: Validate diagram JSON against schema before rendering
 
-## Status
+- **Status:** Accepted
+- **Authors:** Nikola Matkovic
+- **Decision Date:** 2026-11-18
+- **Scope:** org
 
-Accepted
-
-## Context
+## Context / Problem
 
 Diagram-generation tools (such as diagram-toolkit) accept a JSON payload describing
 nodes, edges, and metadata, then render it into a diagram format (e.g. D2, Mermaid).
 Malformed or incomplete JSON that reaches the renderer without validation can produce
 confusing runtime errors, partially-rendered diagrams, or silently wrong output.
 
-## Decision
+## Decision & Rationale
 
 Any code path that accepts diagram JSON (from a file, stdin, or an API/CLI argument)
 **must validate that JSON against its published schema before passing it to a
@@ -35,3 +36,11 @@ Concretely:
   opaque renderer stack traces.
 - Reviewers should flag any PR that adds or modifies a render/export code path without
   a corresponding validation call.
+
+## Considered Options
+
+- Not recorded when this ADR was accepted.
+
+## Appendix / References
+
+- [diagram-toolkit](https://github.com/NikMatkovicDt/diagram-toolkit), where this applies first.

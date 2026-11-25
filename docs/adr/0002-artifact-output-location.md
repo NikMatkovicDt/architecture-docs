@@ -1,10 +1,11 @@
 # ADR-0002: Exported diagram artifacts must live under `artifacts/`
 
-## Status
+- **Status:** Accepted
+- **Authors:** Nikola Matkovic
+- **Decision Date:** 2026-11-18
+- **Scope:** org
 
-Accepted
-
-## Context
+## Context / Problem
 
 diagram-toolkit exports rendered diagrams to SVG, PNG, and PDF via the `export`
 command. Output paths are currently caller-supplied, and inconsistent output locations
@@ -12,7 +13,7 @@ have made it hard to find, clean up, and gitignore generated files across the
 repository (some ended up under `test_result/`, some in the repo root, some in
 ad-hoc temp folders).
 
-## Decision
+## Decision & Rationale
 
 All generated diagram artifacts (SVG/PNG/PDF exports, rendered `.d2` files intended as
 build output rather than source) **must be written under a top-level `artifacts/`
@@ -29,3 +30,11 @@ directory**, using a path structure of `artifacts/<diagram-name>/<file>`.
 - Predictable location for CI to pick up artifacts for upload as build outputs.
 - Reviewers should flag any PR whose export/output path does not resolve under
   `artifacts/`.
+
+## Considered Options
+
+- Not recorded when this ADR was accepted.
+
+## Appendix / References
+
+- [diagram-toolkit](https://github.com/NikMatkovicDt/diagram-toolkit), where this applies first.
