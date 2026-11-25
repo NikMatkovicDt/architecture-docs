@@ -1,51 +1,69 @@
 ---
 name: adr
-description: Write or update an Architecture Decision Record (ADR) - one decision that can be made and carried out quickly by the people it concerns, with rationale, consequences and the options weighed - in the strict format of NikMatkovicDt/architecture-docs. Not for a change that needs buy-in from other teams (that's the rfc skill) or for answering an open question (that's the research skill).
+description: Writes or updates an Architecture Decision Record (ADR) in the strict NikMatkovicDt/architecture-docs format and checks it. Use when recording one decision the people concerned can make quickly (a library, a data store, an API shape, a pattern for one system), or when asked for an ADR. Not for changes that need other teams' buy-in (rfc skill) or open questions still being compared (research skill).
 ---
 
 # ADR
 
-An ADR records **one decision**: "we decided X for this system". If the change needs
-other teams to agree first, it's an RFC (`rfc` skill); an accepted RFC can then lead to
-ADRs. If you're still comparing options, write a research note first (`research` skill).
+One decision: "we decided X for this system". Needs other teams to agree first? That's an
+RFC (`rfc` skill), and ADRs may follow it. Still comparing options? Write a research note
+first (`research` skill).
 
-Everything below lives in the **architecture-docs** repo. Inside ai-devbox, read it through
+All paths are in the **architecture-docs** repo. Inside ai-devbox, read them through
 cocoindex: `get_document(repo="architecture-docs", filename="<path>")`.
 
-## Steps
-1. **Read the rules:** `docs/FORMAT.md` (layout, statuses, numbering) and the template
-   `docs/adr/TEMPLATE.md`. Follow them exactly; don't add or rename sections.
-2. **Check what exists:** search cocoindex for ADRs and RFCs on the topic. A new ADR must
-   not contradict an accepted one silently. Either follow it, or supersede it
-   (`Supersedes: ADR-NNNN`) and say why under Context / Problem. If an RFC led to this
-   decision, link it.
-3. **Place and number it:**
-   - **Scope: repo**: the repo's ADR folder (its existing one, else `docs/adr/`), or
-     wherever your team's process keeps drafts.
-   - **Scope: org** (applies across repos): `docs/adr/` in architecture-docs.
-   - The number is the next free one **in that folder**. Name the file
-     `NNNN-kebab-slug.md`, with the same number in the title.
-4. **Write it:**
-   - Title: the decision as a statement ("Use PostgreSQL for order storage", not
-     "Database choice").
-   - Context / Problem: the problem and what drives it, not the solution.
-   - Decision & Rationale: **one sentence** of decision (must / should / may), then the
-     reasons as bullets.
-   - Consequences: good and bad, including second-order effects.
-   - Considered Options: each real option, one bullet each, with **pros, cons and why
-     it was rejected**.
-   - Appendix / References: the RFC, research notes and ADRs it builds on, or `None.`
-5. **Status:**
-   - You write `Draft`, and set `In Discussion` when you hand it to a person to decide.
-   - You never set `Accepted`, `Implemented`, `Abandoned` or `Superseded`, and never fill
-     in `Decision Date`; a person does.
-   - `Authors`: your name or `seat@team`.
-6. **Check it:** run `scripts/check_records.py` on the file. Outside the repo, fetch it
-   from cocoindex, save it as `/tmp/check_records.py` exactly, and run
-   `python3 /tmp/check_records.py <file>`. Fix every problem, and paste the clean output
-   into your handoff (reviewers check for it).
-7. **Diagrams:** next to the ADR in `diagrams/`, with the diagram-toolkit skill when
-   available, else Mermaid.
+## Workflow
 
-An org-scope ADR reaches architecture-docs as a pull request. CI there runs the same
-checker.
+Progress:
+- [ ] 1. Read `docs/adr/TEMPLATE.md`, and `docs/FORMAT.md` sections **ADR** and **Status values**
+- [ ] 2. Search cocoindex for ADRs and RFCs on the topic
+- [ ] 3. Place and number the file
+- [ ] 4. Fill in the template
+- [ ] 5. Run the checker; fix and re-run until it passes
+- [ ] 6. Hand on with the checker output
+
+1. **Template and rules.** Copy the template's headings exactly. For a complete, valid
+   example, read `docs/adr/0002-artifact-output-location.md`.
+2. **Existing decisions.** Don't contradict an accepted ADR silently. Either follow it, or
+   supersede it (`Supersedes: ADR-NNNN`) and say why under Context / Problem. Link the RFC
+   or research note that led here.
+3. **Place and number.**
+   - **Scope: repo**: the repo's ADR folder (its existing one, else `docs/adr/`), or where
+     your team keeps drafts.
+   - **Scope: org** (applies across repos): `docs/adr/` in architecture-docs.
+   - File `NNNN-kebab-slug.md`, with NNNN the next free number **in that folder**. The
+     title uses the same number.
+4. **Fill in.**
+   - Title: the decision as a statement ("Use PostgreSQL for order storage").
+   - Decision & Rationale: one sentence with must / should / may, then the reasons as
+     bullets.
+   - Considered Options: one bullet per real option, each with pros, cons and why it was
+     rejected.
+   - Status `Draft`; set `In Discussion` when you hand it to a person to decide.
+     `Authors`: your name or `seat@team`.
+5. **Validate**, before you hand it on:
+   ```sh
+   python3 scripts/check_records.py <file>          # inside architecture-docs
+   python3 /tmp/check_records.py <file>             # anywhere else
+   ```
+   Outside the repo, first fetch `scripts/check_records.py` through cocoindex and save the
+   `content` field to `/tmp/check_records.py` byte for byte. If it reports problems, fix
+   them and run it again. Only continue when it prints `0 problem(s)`.
+6. **Hand on** with the checker's output pasted in; reviewers check for it. An org-scope
+   ADR goes to architecture-docs as a pull request, and CI runs the same checker.
+
+## Gotchas
+- **Only people decide.** Never set `Accepted`, `Implemented`, `Abandoned` or
+  `Superseded`, and never fill in `Decision Date`, even if the decision seems obvious.
+- **The index lags.** cocoindex only has merged ADRs as of its last re-index. Before
+  picking a number, also list the folder itself and check open pull requests, or two
+  ADRs get the same number.
+- **Numbers are per folder.** A repo ADR copied into architecture-docs (or the reverse)
+  is renumbered there; update links to it.
+- **Section names are exact**, including `Context / Problem`, `Decision & Rationale` and
+  `Appendix / References`. Don't add sections; use `###` inside one instead.
+- **Angle brackets in prose fail the checker** as leftover placeholders. Write generics
+  like `Optional<T>` in backticks.
+- **Every section needs text.** With nothing to reference, write `None.`
+- Diagrams go next to the ADR in `diagrams/`, with the diagram-toolkit skill when it's
+  available, else Mermaid.
